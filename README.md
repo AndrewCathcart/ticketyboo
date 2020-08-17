@@ -76,6 +76,8 @@ ChargeCreated
 
 ### How to run
 
-At the root of this project run the following command, provided you have installed all of the relevant requirements and have the Docker daemon & Kubernetes running in the background
+Provided you have installed all of the relevant requirements and have the Docker daemon & Kubernetes running in the background, run the follow command to;
+
+Run in development mode
 
 `$ skaffold dev`
