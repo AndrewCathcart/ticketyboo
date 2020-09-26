@@ -1,6 +1,5 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-
 import { User } from '../models/user';
 
 export class JwtManager {
