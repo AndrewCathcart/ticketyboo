@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { DatabaseConnectionError } from './errors/database-connection-error';
 
-const start = async () => {
+(async () => {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined.');
   }
@@ -20,6 +20,4 @@ const start = async () => {
   app.listen(3000, () => {
     console.log('Auth service listening on port 3000.');
   });
-};
-
-start();
+})();
