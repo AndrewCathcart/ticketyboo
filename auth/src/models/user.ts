@@ -1,5 +1,5 @@
-import { Schema, Document, model } from 'mongoose';
-import { Password } from '../utils/password';
+import { Document, model, Schema } from 'mongoose';
+import { PasswordManager } from '../utils/password-manager';
 
 interface IUser {
   email: string;
@@ -8,21 +8,33 @@ interface IUser {
 
 type UserDoc = Document & IUser;
 
-const UserSchema: Schema = new Schema<UserDoc>({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const UserSchema: Schema = new Schema<UserDoc>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+      },
+      versionKey: false,
+    },
+  }
+);
 
 UserSchema.pre('save', async function (done) {
   if (this.isModified('password')) {
-    const hashedPw = await Password.toHash(this.get('password'));
+    const hashedPw = await PasswordManager.toHash(this.get('password'));
     this.set('password', hashedPw);
   }
   done();
