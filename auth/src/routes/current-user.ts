@@ -7,7 +7,7 @@ router.get(
   '/api/users/currentuser',
   currentUser,
   (req: Request, res: Response) => {
-    res.send({ currentuser: req.currentUser || null });
+    res.send({ currentUser: req.currentUser || null });
   }
 );
 
