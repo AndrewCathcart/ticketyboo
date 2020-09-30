@@ -17,3 +17,6 @@ Thumbs.db
 
 # Ignore built ts files
 dist/**/*
+
+# Ignore built Next files
+.next
