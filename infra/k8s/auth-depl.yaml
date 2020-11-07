@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: andrewcathcart/auth
+          image: andrewcathcart/ticketyboo-auth
           env:
             - name: JWT_SECRET
               valueFrom:

@@ -10,11 +10,19 @@ build:
   local:
     push: false
   artifacts:
-    - image: andrewcathcart/auth
+    - image: andrewcathcart/ticketyboo-auth
       context: auth
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: 'src/**/*.ts'
+            dest: .
+    - image: andrewcathcart/ticketyboo-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
             dest: .

@@ -81,3 +81,5 @@ Provided you have installed all of the relevant requirements and have the Docker
 Run in development mode
 
 `$ skaffold dev`
+
+Navigate to ticketyboo.dev in your browser (type thisisunsafe if you get a warning from Chrome)
