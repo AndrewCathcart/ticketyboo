@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useRequest from '../../hooks/use-request';
 
-const SignUp = () => {
+const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
 
+  const router = useRouter();
   const { doRequest, errors } = useRequest({
-    url: '/api/users/signup',
+    url: '/api/users/signin',
     method: 'post',
     body: {
       email,
@@ -25,7 +25,7 @@ const SignUp = () => {
 
   return (
     <form onSubmit={onSubmit} className='w-50 mx-auto mt-2'>
-      <h1>Sign Up</h1>
+      <h1>Sign In</h1>
       <div className='form-group'>
         <label>Email Address</label>
         <input
@@ -44,9 +44,9 @@ const SignUp = () => {
         />
       </div>
       {errors}
-      <button className='btn btn-primary'>Sign Up</button>
+      <button className='btn btn-primary'>Sign In</button>
     </form>
   );
 };
 
-export default SignUp;
+export default SignIn;
