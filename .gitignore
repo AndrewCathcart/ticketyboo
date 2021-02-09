@@ -20,3 +20,6 @@ dist/**/*
 
 # Ignore built Next files
 .next
+
+# this is under a separate repo
+common

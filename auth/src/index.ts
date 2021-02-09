@@ -1,6 +1,6 @@
+import { DatabaseConnectionError } from '@ticketyboo/common';
 import mongoose from 'mongoose';
 import { app } from './app';
-import { DatabaseConnectionError } from './errors/database-connection-error';
 
 (async () => {
   if (!process.env.JWT_SECRET) {
