@@ -32,13 +32,17 @@ const UserSchema: Schema = new Schema(
   }
 );
 
-UserSchema.pre('save', async function (done) {
-  const err = new Error('An error occurred whilst saving.');
+UserSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    const hashedPw = await PasswordManager.toHash(this.get('password'));
-    this.set('password', hashedPw);
+    try {
+      const hashedPw = await PasswordManager.toHash(this.get('password'));
+      this.set('password', hashedPw);
+    } catch (error) {
+      console.log(error);
+      next(new Error('An error occurred whilst saving.'));
+    }
   }
-  done(err);
+  next();
 });
 
 const UserModel = model<IUserDoc>('User', UserSchema);

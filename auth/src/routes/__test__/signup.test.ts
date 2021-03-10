@@ -30,7 +30,7 @@ it('returns a 400 with missing email and password', async () => {
     errors: [
       {
         field: 'password',
-        message: 'Password must be between 4 and 20 characters',
+        message: 'Password must be between 4 and 20 characters.',
       },
     ],
   });
@@ -44,7 +44,7 @@ it('returns a 400 with missing email and password', async () => {
     errors: [
       {
         field: 'email',
-        message: 'An email must be provided.',
+        message: 'A valid email must be provided.',
       },
     ],
   });
