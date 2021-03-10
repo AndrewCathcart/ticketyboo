@@ -6,6 +6,7 @@ import { app } from './app';
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined.');
   }
+
   if (!process.env.MONGO_URI) {
     throw new Error('MONGO_URI is not defined.');
   }
@@ -21,6 +22,6 @@ import { app } from './app';
   }
 
   app.listen(3000, () => {
-    console.log('Auth service listening on port 3000.');
+    console.log('Tickets service listening on port 3000.');
   });
 })();
