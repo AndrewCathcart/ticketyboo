@@ -6,9 +6,9 @@ interface IUser {
   password: string;
 }
 
-type UserDoc = Document & IUser;
+interface IUserDoc extends Document, IUser {}
 
-const UserSchema: Schema = new Schema<UserDoc>(
+const UserSchema: Schema = new Schema(
   {
     email: {
       type: String,
@@ -32,15 +32,20 @@ const UserSchema: Schema = new Schema<UserDoc>(
   }
 );
 
-UserSchema.pre('save', async function (done) {
+UserSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    const hashedPw = await PasswordManager.toHash(this.get('password'));
-    this.set('password', hashedPw);
+    try {
+      const hashedPw = await PasswordManager.toHash(this.get('password'));
+      this.set('password', hashedPw);
+    } catch (error) {
+      console.log(error);
+      next(new Error('An error occurred whilst saving.'));
+    }
   }
-  done();
+  next();
 });
 
-const UserModel = model<UserDoc>('User', UserSchema);
+const UserModel = model<IUserDoc>('User', UserSchema);
 
 export class User extends UserModel {
   constructor(attrs: IUser) {

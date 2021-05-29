@@ -10,6 +10,7 @@ node_modules
 # Editors
 .idea
 *.iml
+.vscode
 
 # OS metadata
 .DS_Store
@@ -20,3 +21,6 @@ dist/**/*
 
 # Ignore built Next files
 .next
+
+# this is under a separate repo
+common
