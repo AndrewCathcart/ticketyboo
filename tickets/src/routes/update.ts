@@ -2,16 +2,12 @@ import {
   NotAuthorizedError,
   NotFoundError,
   requireAuth,
-  validateRequest
+  validateRequest,
 } from '@ticketyboo/common';
 import express, { Request, Response } from 'express';
 import { body, param } from 'express-validator';
 import { Types as MongooseTypes } from 'mongoose';
 import { Ticket } from '../models/ticket';
-<<<<<<< HEAD
-=======
-import { param } from 'express-validator';
->>>>>>> a24418bf1620e752bf25552364d0df0c6739e44d
 
 const router = express.Router();
 
@@ -51,4 +47,3 @@ router.put(
 );
 
 export { router as updateTicketRouter };
-
