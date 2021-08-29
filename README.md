@@ -83,3 +83,12 @@ Run in development mode
 `$ skaffold dev`
 
 Navigate to ticketyboo.dev in your browser (type thisisunsafe if you get a warning from Chrome)
+
+### Port forwarding notes
+
+In our nats-test folder, we need to set up some port forwarding for testing purposes.
+
+```bash
+kubectl get pods
+kubectl port-forward <pod name> <local port>:<pod port>
+```
