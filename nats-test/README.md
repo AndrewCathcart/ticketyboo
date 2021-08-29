@@ -138,3 +138,57 @@ const sub = stan.subscribe(
   options
 );
 ```
+
+### nats-depl.yml
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+        - name: nats
+          image: nats-streaming:0.17.0
+          args: [
+              '-p',
+              '4222',
+              '-m',
+              '8222',
+              '-hbi', # Interval at which server sends heartbeat to a client
+              '5s',
+              '-hbt', # How long server waits for a heartbeat response
+              '5s',
+              '-hbf', # Number of failed heartbeats before server closes the client connection
+              '2',
+              '-SD',
+              '-cid',
+              'ticketyboo',
+            ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-srv
+spec:
+  selector:
+    app: nats
+  ports:
+    - name: client
+      protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - name: monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: 8222
+```
