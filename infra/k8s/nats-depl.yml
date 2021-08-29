@@ -15,17 +15,16 @@ spec:
       containers:
         - name: nats
           image: nats-streaming:0.17.0
-          args:
-            [
+          args: [
               '-p',
               '4222',
               '-m',
               '8222',
-              '-hbi',
+              '-hbi', # Interval at which server sends heartbeat to a client
               '5s',
-              '-hbt',
+              '-hbt', # How long server waits for a heartbeat response
               '5s',
-              '-hbf',
+              '-hbf', # Number of failed heartbeats before server closes the client connection
               '2',
               '-SD',
               '-cid',
