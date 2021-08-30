@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto';
-import nats, { Message } from 'node-nats-streaming';
+import nats from 'node-nats-streaming';
+import TicketCreatedListener from './events/ticket-created-listener';
 
 console.clear();
 
@@ -15,21 +16,7 @@ stan.on('connect', () => {
     process.exit();
   });
 
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName('orders-service');
-  const sub = stan.subscribe(
-    'ticket:created',
-    'orders-service-queue-group',
-    options
-  );
-
-  sub.on('message', (msg: Message) => {
-    console.log(`Received event #${msg.getSequence()}, data: ${msg.getData()}`);
-    msg.ack();
-  });
+  new TicketCreatedListener(stan).listen();
 });
 
 // Gracefully handle shutdown by closing the client
