@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 
 // jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
 
+jest.mock('../nats-wrapper');
+
 let mongodb: MongoMemoryServer;
 beforeAll(async () => {
   process.env.JWT_SECRET = 'asdfasdf';
@@ -19,6 +21,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

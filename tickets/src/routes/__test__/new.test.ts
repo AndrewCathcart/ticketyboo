@@ -2,6 +2,7 @@ import { Types as MongooseTypes } from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 import { TicketsTestHelper } from '../../test/tickets-test-helper';
 
 const ticketsTestHelper = new TicketsTestHelper();
@@ -14,6 +15,7 @@ it('has a route handler listening to /api/tickets for post requests', async () =
 
 it('can only be accessed if the user is signed in', async () => {
   await request(app).post('/api/tickets').send({}).expect(401);
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(0);
 });
 
 it('returns a status other than 401 if the user is signed in', async () => {
@@ -22,6 +24,8 @@ it('returns a status other than 401 if the user is signed in', async () => {
     .set('Cookie', ticketsTestHelper.signIn(mongoId))
     .send({});
   expect(response.status).not.toEqual(401);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(0);
 });
 
 it('returns an error if an invalid title is provided', async () => {
@@ -41,6 +45,8 @@ it('returns an error if an invalid title is provided', async () => {
       price: 10,
     })
     .expect(400);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(0);
 });
 
 it('returns an error if an invalid price is provided', async () => {
@@ -60,6 +66,8 @@ it('returns an error if an invalid price is provided', async () => {
       title: 'test',
     })
     .expect(400);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(0);
 });
 
 it('creates a ticket with valid inputs', async () => {
@@ -78,6 +86,7 @@ it('creates a ticket with valid inputs', async () => {
 
   tickets = await Ticket.find({});
 
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1);
   expect(tickets.length).toEqual(1);
   expect(tickets[0].id).toBeDefined();
   expect(tickets[0].title).toEqual(fakeTicket.title);

@@ -1,6 +1,7 @@
 import { Types as MongooseTypes } from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
+import { natsWrapper } from '../../nats-wrapper';
 import { TicketsTestHelper } from '../../test/tickets-test-helper';
 
 const ticketsTestHelper = new TicketsTestHelper();
@@ -104,6 +105,8 @@ it('updates the ticket with valid input', async () => {
   const ticket = await request(app)
     .get(`/api/tickets/${response.body.id}`)
     .send();
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(2);
 
   expect(ticket.body.title).toEqual('valid title');
   expect(ticket.body.price).toEqual(5);

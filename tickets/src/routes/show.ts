@@ -1,7 +1,7 @@
 import { NotFoundError, validateRequest } from '@ticketyboo/common';
 import express, { Request, Response } from 'express';
 import { param } from 'express-validator';
-import { Types as MongooseTypes } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
@@ -9,7 +9,7 @@ const router = express.Router();
 router.get(
   '/api/tickets/:id',
   param('id')
-    .custom((idValue) => MongooseTypes.ObjectId.isValid(idValue))
+    .custom((idValue) => isValidObjectId(idValue))
     .withMessage('id must be a valid MongoDB ObjectId'),
   validateRequest,
   async (req: Request, res: Response) => {

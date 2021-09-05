@@ -1,7 +1,9 @@
 import { requireAuth, validateRequest } from '@ticketyboo/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
 import { Ticket } from '../models/ticket';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -18,7 +20,16 @@ router.post(
     const userId = req.currentUser!.id;
 
     const ticket = new Ticket({ title, price, userId });
+
     await ticket.save();
+
+    const publisher = new TicketCreatedPublisher(natsWrapper.client);
+    await publisher.publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }
