@@ -8,7 +8,7 @@ interface IUser {
 
 interface IUserDoc extends Document, IUser {}
 
-const UserSchema: Schema = new Schema(
+const userSchema = new Schema<IUserDoc>(
   {
     email: {
       type: String,
@@ -32,7 +32,8 @@ const UserSchema: Schema = new Schema(
   }
 );
 
-UserSchema.pre('save', async function (next) {
+// before we save the user, hash the password and use that instead of the plain text password
+userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     try {
       const hashedPw = await PasswordManager.toHash(this.get('password'));
@@ -45,7 +46,7 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-const UserModel = model<IUserDoc>('User', UserSchema);
+const UserModel = model<IUserDoc>('User', userSchema);
 
 export class User extends UserModel {
   constructor(attrs: IUser) {
