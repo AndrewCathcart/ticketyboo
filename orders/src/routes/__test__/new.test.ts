@@ -3,6 +3,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 import { OrdersTestHelper } from '../../test/orders-test-helper';
 
 const ordersTestHelper = new OrdersTestHelper();
@@ -55,6 +56,5 @@ it('reserves a ticket', async () => {
       ticketId: ticket.id,
     })
     .expect(201);
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1);
 });
-
-it.todo('emits an order created event');

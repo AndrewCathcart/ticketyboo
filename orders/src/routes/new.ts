@@ -8,8 +8,10 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { isValidObjectId } from 'mongoose';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 import { Order } from '../models/order';
 import { Ticket } from '../models/ticket';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -53,7 +55,17 @@ router.post(
     });
     await order.save();
 
-    // TODO: Publish an order:created event
+    const publisher = new OrderCreatedPublisher(natsWrapper.client);
+    await publisher.publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      ticket: {
+        id: ticket.id,
+        price: ticket.price,
+      },
+    });
 
     res.status(201).send(order);
   }

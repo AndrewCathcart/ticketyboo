@@ -4,6 +4,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 import { OrdersTestHelper } from '../../test/orders-test-helper';
 
 const ordersTestHelper = new OrdersTestHelper();
@@ -78,6 +79,5 @@ it('deletes an order successfully', async () => {
 
   const updatedOrder = await Order.findById(order.id);
   expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(2);
 });
-
-it.todo('emits an order cancelled event');
